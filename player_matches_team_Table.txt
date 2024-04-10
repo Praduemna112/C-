@@ -1,0 +1,96 @@
+mysql> select * from team;
++---------+-------+------------+
+| team_id | tname | player_num |
++---------+-------+------------+
+|     100 | CSK   |         15 |
+|     101 | RCB   |         15 |
+|     102 | DC    |         15 |
+|     103 | MI    |         15 |
+|     104 | SRH   |         15 |
+|     105 | GT    |         15 |
+|     106 | LSG   |         15 |
+|     107 | RR    |         15 |
+|     108 | KKR   |         15 |
+|     109 | KXP   |         15 |
+
+
+ insert into team values(100,'CSK',15);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into team values(101,'RCB',15);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into team values(102,'DC',15);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into team values(103,'MI',15);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into team values(104,'SRH',15);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into team values(105,'GT',15);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into team values(106,'LSG',15);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into team values(107,'RR',15);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into team values(108,'KKR',15);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into team values(109,'KXP',15);
+Query OK, 1 row affected (0.01 sec)
+
+create table player(
+     pid int primary key,
+     pname varchar(20),
+     speciality enum('bowler','batsman','wicket_keeper','all_rounder'),
+     date_of_joining date,
+     num_matches int,
+     team_id int,
+     constraint fk_ti foreign key(team_id) references team(team_id)
+     on delete set null
+     on update cascade);
+
+ insert into player values(7,'MS Dhoni','all_rounder','2003/03/01',215,100);
+Query OK, 1 row affected, 1 warning (0.01 sec)
+
+insert into player values(12,'R Jadeja','all_rounder','2005/03/01',150,100);
+ insert into player values(9,'S Raina','batsman','2005/05/01',140,100);
+ insert into player values(18,'V Kohali','batsman','2005/05/01',200,101);
+insert into player values(15,'Maxwel','batsman','2005/05/01',180,101);
+insert into player values(6,'F du plesis','batsman','2006/05/01',175,101);
+ insert into player values(45,'R Sharma','batsman','2003/05/01',175,103);
+ insert into player values(20,'H Pandya','batsman','2011/05/01',90,103);
+ insert into player values(23,'S KUMAR','batsman','2012/05/01',90,103);
+insert into player values(3,'BUMARAH','bowler','2012/05/01',105,103);
+insert into player values(89,'B KUMAR','bowler','2008/05/01',115,104);
+
+
+create table matches(
+   mid int primary key,
+   team1_id int,
+   team2_id int,
+   match_date date,
+   winner int,
+   man_of_the_match int,
+   constraint fk_mt1 foreign key(team1_id) references team(team_id),
+   constraint fk_mt2 foreign key(team2_id) references team(team_id),
+   constraint fk_mt3 foreign key(man_of_the_match) references player(pid),
+   constraint chk check(team1_id !=team2_id),
+   winner chk_win check (winner in (team1_id,team2_id))
+   );
+
+
+mysql> select * from matches;
++----------+----------+----------+--------------+--------+------------------+
+| match_id | team1_id | team2_id | matches_date | winner | man_of_the_match |
++----------+----------+----------+--------------+--------+------------------+
+|        1 |      100 |      101 | 2024-03-22   |    100 |               12 |
+|        2 |      101 |      106 | 2024-03-27   |    106 |               18 |
+|        3 |      103 |      104 | 2024-03-27   |    104 |               62 |
+|        4 |      103 |      105 | 2024-03-27   |    105 |                5 |
++----------+----------+----------+--------------+--------+------------------+
